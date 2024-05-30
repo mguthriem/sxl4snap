@@ -3,6 +3,8 @@ from mantid.simpleapi import *
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
+sys.path.append('/SNS/SNAP/shared/Malcolm/code/crystalBox')
+import crystalBox as crys
 
 import SNAPSXLTools as snp
 import importlib
@@ -11,16 +13,18 @@ importlib.reload(snp)
 ### experiment data info ###
 run = 48028
 isLite = False
+
 ### -------------------- ###
 
 ### sample info ###
-a = 18.2928
-b = 18.6383
-c = 6.5848
-alpha = 90
-beta = 90
-gamma = 90
-centering = 'F'
+sample = crys.Box('natrolite') #modified to allow spec via cif file
+a = sample.a
+b = sample.b
+c = sample.c
+alpha = sample.alpha
+beta = sample.beta
+gamma = sample.gamma
+centering = sample.HMSymbol[0] #todo: is this a safe thing to do?
 ### ----------- ###
 
 #get SNAP config info
@@ -32,7 +36,6 @@ print(f"stateDict: {stateDict}")
 ### incident wavelength ###
 wavelength_band = [stateDict["wav"]-instConfig.neutronBandwidth/2,
     stateDict["wav"]+instConfig.neutronBandwidth/2]
-
 
 ipts = GetIPTS(runNumber=run,
     instrument=instConfig.name)
@@ -74,3 +77,5 @@ ConvertToMD(InputWorkspace='data',
             MaxValues=[+Q_max,+Q_max,+Q_max],
             PreprocDetectorsWS='detectors',
             OutputWorkspace='md')
+            
+#Find UB
