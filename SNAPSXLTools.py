@@ -48,7 +48,7 @@ def stateFromRunFunction(runNum,inst):
   import h5py
   from os.path import exists
   import sys
-  import SNAP_InstPrm as iPrm
+
 
   #print(iPrm.inst)
   #initialise errorState dictionary
