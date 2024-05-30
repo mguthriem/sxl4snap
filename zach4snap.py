@@ -3,7 +3,7 @@ from mantid.simpleapi import *
 import matplotlib.pyplot as plt
 import numpy as np
 import sys
-sys.path.append('/SNS/SNAP/shared/Malcolm/code/SimpleCalibrationScripts')
+
 import SNAPSXLTools as snp
 import importlib
 importlib.reload(snp)
@@ -26,6 +26,8 @@ centering = 'F'
 #get SNAP config info
 instConfig = snp.instConfig("/SNS/SNAP/shared/Calibration_dynamic/SNAPInstPrm.json")
 stateID,stateDict,errorState=snp.stateFromRunFunction(run,instConfig)
+print(f"stateID: {stateID}")
+print(f"stateDict: {stateDict}")
 
 ### incident wavelength ###
 wavelength_band = [stateDict["wav"]-instConfig.neutronBandwidth/2,
@@ -33,7 +35,7 @@ wavelength_band = [stateDict["wav"]-instConfig.neutronBandwidth/2,
 
 
 ipts = GetIPTS(runNumber=run,
-    instrument='SNAP')
+    instrument=instConfig.name)
     
 if run<=40000:   #TODO: figure out exact run where naming changed
     Fname = f"{ipts}data/SNAP_{run}_event.nxs"
